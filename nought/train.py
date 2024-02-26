@@ -128,9 +128,16 @@ def train(config):
         `config` (dict): A dictionary containing configuration settings for training.
     """
     pl.seed_everything(config.get("seed", 42), workers=True)
+    """
+    设置随机种子，workers设置为Ture表示对所有打他loader都能进行正确的设置？？？
+    """
+
 
     model_module = NougatModelPLModule(config)
     data_module = NougatDataPLModule(config)
+    """
+    符合框架的data module和model module
+    """
 
     # add dataset to data_module
     datasets = {"train": [], "validation": []}
@@ -143,16 +150,33 @@ def train(config):
                     max_length=config.max_length,
                     split=split,
                 )
+            """
+            NougatDataset是torch中Dataset的子类
+            """
             )
     data_module.train_datasets = datasets["train"]
     data_module.val_datasets = datasets["validation"]
+    """
+    需要对data module的train和val dataset进行指定
+    """
+
 
     lr_callback = LearningRateMonitor(logging_interval="step")
+    """
+    指定learning rate的callback
+    学习率策略是定义在**model module**中的
+    """
     checkpoint_callback = ModelCheckpoint(
         save_last=True,
         dirpath=Path(config.result_path) / config.exp_name / config.exp_version,
     )
+    """
+    checkpoint callback
+    """
     grad_norm_callback = GradNormCallback()
+    """
+    自定义的callback
+    """
     custom_ckpt = CustomCheckpointIO
 
     if not config.debug:
@@ -164,6 +188,9 @@ def train(config):
             version=config.exp_version,
             default_hp_metric=False,
         )
+    """
+    定义logger
+    """
     trainer = pl.Trainer(
         num_nodes=config.get("num_nodes", 1),
         devices="auto",
@@ -192,26 +219,26 @@ def train(config):
         ckpt_path=config.get("resum_from_checkpoint_path", None)
     )
 
-    if __name__ == "__main__":
-        parser = argparse.ArgumentParser()
-        parser.add_argument("--config", type=str, required=True)
-        parser.add_argument("--exp_version", type=str, required=False)
-        parser.add_argument("--debug", action="store_true")
-        parser.add_argument("--job", type=int, default=None)
-        args, left_argv = parser.parse_known_args()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", type=str, required=True)
+    parser.add_argument("--exp_version", type=str, required=False)
+    parser.add_argument("--debug", action="store_true")
+    parser.add_argument("--job", type=int, default=None)
+    args, left_argv = parser.parse_known_args()
 
-        config = Config(args.config)
-        config.argv_update(left_argv)
-        config.debug = args.debug
-        config.job = args.job
-        if not config.get("exp_name", False):
-            config.exp_name = basename(args.config).split(".")[0]
-        config.exp_version = (
-            datetime.datatime.now().strftime("%Y%m%d_%H%M%S")
-            if not args.exp_version
-            else args.exp_version
-        )
-        save_config_file(
-            config, Path(config.result_path) / config.exp_name / config.exp_version
-        )
-        train(config)
+    config = Config(args.config)
+    config.argv_update(left_argv)
+    config.debug = args.debug
+    config.job = args.job
+    if not config.get("exp_name", False):
+        config.exp_name = basename(args.config).split(".")[0]
+    config.exp_version = (
+        datetime.datatime.now().strftime("%Y%m%d_%H%M%S")
+        if not args.exp_version
+        else args.exp_version
+    )
+    save_config_file(
+        config, Path(config.result_path) / config.exp_name / config.exp_version
+    )
+    train(config)
