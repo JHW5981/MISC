@@ -132,7 +132,7 @@ class NougatModelPLModule(pl.LightningModule):
                )
 
         assert max_iter is not None
-        optimizer = torch.optim,AdamW(self.parameters(), lr=self.config.lr)
+        optimizer = torch.optim.AdamW(self.parameters(), lr=self.config.lr)
         scheduler = {
             "scheduler": self.exponential_scheduler(
                 optimizer,
