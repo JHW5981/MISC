@@ -251,3 +251,4 @@ class NougatDataPLModule(pl.LightningDataModule):
             return torch.utils.data.dataloader.default_collate(batch)
         except AttributeError:
             pass
+
