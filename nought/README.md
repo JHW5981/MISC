@@ -20,7 +20,7 @@
 </font>
 
 
-<h1><font face="黑体" size=10 color=white>2024.2.27 Nougat/predict.py</font></h1>
+<h1><font face="黑体" size=10 color=white>2024.2.28 Nougat/predict.py</font></h1>
 <font face="宋体" size=5 color=white>
 <ul>
     <li>`predict.py`先导入模型，将模型设置成eval模式，再准备dataset，准备dataloader，dataset是每个pdf用一个LazyDataset进行定义，然后append到datasets里，用ConcatDataset合成一个。然后进行inference，然后对模型结果进行处理保存。</li>
@@ -28,7 +28,7 @@
 </font>
 
 
-<h1><font face="黑体" size=10 color=white>2024.2.27 Nougat/lightning_module.py</font></h1>
+<h1><font face="黑体" size=10 color=white>2024.2.29 Nougat/lightning_module.py</font></h1>
 <font face="宋体" size=5 color=white>
 <ul>
     <li>这个文件非常重要，定义了使用pytorch ligntning训练所需的Model Module和Data Module</li>
