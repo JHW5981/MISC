@@ -129,7 +129,8 @@ def train(config):
     """
     pl.seed_everything(config.get("seed", 42), workers=True)
     """
-    设置随机种子，workers设置为Ture表示对所有打他loader都能进行正确的设置？？？
+    设置随机种子，workers设置为Ture表示对所有dataloader的线程和进程都设置了唯一的随机种子，
+    当它为True时，保证了不同线程对图像的增强不会重复
     """
 
 

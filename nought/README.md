@@ -73,3 +73,17 @@
     </li>
 </ul>
 </font>
+
+
+<h1><font face="黑体" size=10 color=white>2024.3.3 Nougat/nougat/model.py</font></h1>
+<font face="宋体" size=5 color=white>
+终于来到了模型部分，nougat是由两个模型拼起来的，一个是swintransform，另一个是MBartForCausalLM的decoder部分。下面讲一讲model.py的思路。
+<ul>
+    <li>分为四个部分，一个是`SwinEncoder`，一个是`BARTDecoder`部分，然后就是将两者结合到一起的`NougatModel`。其他部分是上面三个类中用到的辅助类，包括继承自`PretrainedConfig`的`NougatConfig`，还有用于decoder早停的类`StoppingCriteriaScores`。</li>
+    <li>`SwinEncoder`继承自`nn.Module`，的初始化函数做的就是定义了`self.model`，直接通过hugging face中timm库的类`SwinTransformer`去定义的。并导入了pretrain好的ckpt，并且对不能直接导入的参数进行了修改。`forward`函数就是一套前向传播的流程完事。还有就是一些辅助函数，主要是对输入图片进行操作。</li>
+    <li>`BARTDecoder`继承自`nn.Module`，初始化中首先进行了参数的初始化，然后对tokenizer进行了config，直接调用现成的模型`MBartForCausalLM`定义`self.model`，对model进行config，包括了导入pretrained model并对新模型中不适应的dict进行处理。`forward`中直接调用`self.model.forward`进行了前向传播。其他方法主要是一些辅助方法，position embedding weight进行规整等（变成合适于max_length的长度）</li>
+    <li>`NougatModel`继承自`PreTrainedModel`，初始化中传入一个config的类，此处是继承自`PretrainedConfig`的类`NougatConfig`，然后直接调用上面定义的两个定义好的encoder和decoder作为`self.encoder`和`self.decoder`。`forward`就是传入数据前向传播。`inference`做法整体上是数据导到模型产出结果，然后对结果进行各种处理，判断有没有重复等等。值得注意的一个点是其中对各种参数的设置，比如其中的decoder中的`stopping_criteria`，决定什么时候停止继续decode，停止decode的时候其实就是出现重复的时候，文件中定义了终止的类，继承自`StoppingCriteria`。作者应该是通过实验得出了出现重复的规律进行规避。</li>
+    
+</ul>
+</font>
+
