@@ -87,3 +87,18 @@
 </ul>
 </font>
 
+<h1><font face="黑体" size=10 color=white>2024.3.4 Nougat/nougat/transforms.py</font></h1>
+<font face="宋体" size=5 color=white>
+自定义的数据增强
+<ul>
+    <li>`transorms.py`中使用了流行的`albumentations`库对图片进行增强，整体来说就是定义transform给model程序去调用。</li>
+</ul>
+</font>
+
+<h1><font face="黑体" size=10 color=white>2024.3.4 Nougat/nougat/metrics.py</font></h1>
+<font face="宋体" size=5 color=white>
+评估模型的指标
+<ul>
+    <li>`metrics.py`中使用`nltk`包计算包括`edit_distance`，`bleu`，`meteor`，`precision`，'recall`，`f_measure`在内的各种指标。其中最主要的两个函数是`compute_metrics`以及`get_metrics`，前者用于计算各种指标，后者用于并行化计算多组metrics。其他的函数都是些辅助函数，使输入符合指标计算函数。</li>
+</ul>
+</font>
