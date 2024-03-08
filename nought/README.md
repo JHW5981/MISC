@@ -102,3 +102,12 @@
     <li>`metrics.py`中使用`nltk`包计算包括`edit_distance`，`bleu`，`meteor`，`precision`，'recall`，`f_measure`在内的各种指标。其中最主要的两个函数是`compute_metrics`以及`get_metrics`，前者用于计算各种指标，后者用于并行化计算多组metrics。其他的函数都是些辅助函数，使输入符合指标计算函数。</li>
 </ul>
 </font>
+
+
+<h1><font face="黑体" size=10 color=white>2024.3.8 Nougat/utils/dataset.py</font></h1>
+<font face="宋体" size=5 color=white>
+数据集构建
+<ul>
+    <li>构建用于训练的数据集，没有特别的地方，主要是熟悉构架数据集的流程。首先自定义的数据集继承自`torch.utils.data.Dataset`，然后至少有三个方法，`__init__`用于初始化，`__len__(self)`，返回dataset的长度，`__getitem__(self, index)`用于从数据集中取数据，返回用于训练的数据。还可以定义些辅助函数，里面定义的静态方法`ignore_none_collate(batch)`不知道咋去用的，好像也不是钩子函数，里面调用了`torch.utils.data.dataloader.default_collate`函数，将batch中的数据叠起来。见Jay E的CSDN博客。</li>
+</ul>
+</font>
