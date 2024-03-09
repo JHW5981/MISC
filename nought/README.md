@@ -97,17 +97,20 @@
 
 <h1><font face="黑体" size=10 color=white>2024.3.4 Nougat/nougat/metrics.py</font></h1>
 <font face="宋体" size=5 color=white>
-评估模型的指标
-<ul>
-    <li>`metrics.py`中使用`nltk`包计算包括`edit_distance`，`bleu`，`meteor`，`precision`，'recall`，`f_measure`在内的各种指标。其中最主要的两个函数是`compute_metrics`以及`get_metrics`，前者用于计算各种指标，后者用于并行化计算多组metrics。其他的函数都是些辅助函数，使输入符合指标计算函数。</li>
-</ul>
+`metrics.py`中使用`nltk`包计算包括`edit_distance`，`bleu`，`meteor`，`precision`，'recall`，`f_measure`在内的各种指标。其中最主要的两个函数是`compute_metrics`以及`get_metrics`，前者用于计算各种指标，后者用于并行化计算多组metrics。其他的函数都是些辅助函数，使输入符合指标计算函数。
+
 </font>
 
 
 <h1><font face="黑体" size=10 color=white>2024.3.8 Nougat/utils/dataset.py</font></h1>
 <font face="宋体" size=5 color=white>
-数据集构建
+构建用于训练的数据集，没有特别的地方，主要是熟悉构架数据集的流程。首先自定义的数据集继承自`torch.utils.data.Dataset`，然后至少有三个方法，`__init__`用于初始化，`__len__(self)`，返回dataset的长度，`__getitem__(self, index)`用于从数据集中取数据，返回用于训练的数据。还可以定义些辅助函数，里面定义的静态方法`ignore_none_collate(batch)`不知道咋去用的，好像也不是钩子函数，里面调用了`torch.utils.data.dataloader.default_collate`函数，将batch中的数据叠起来。见Jay E的CSDN博客。
+</font>
+
+<h1><font face="黑体" size=10 color=white>2024.3.8 Nougat/utils/device.py+checkpoint.py</font></h1>
+<font face="宋体" size=5 color=white>
 <ul>
-    <li>构建用于训练的数据集，没有特别的地方，主要是熟悉构架数据集的流程。首先自定义的数据集继承自`torch.utils.data.Dataset`，然后至少有三个方法，`__init__`用于初始化，`__len__(self)`，返回dataset的长度，`__getitem__(self, index)`用于从数据集中取数据，返回用于训练的数据。还可以定义些辅助函数，里面定义的静态方法`ignore_none_collate(batch)`不知道咋去用的，好像也不是钩子函数，里面调用了`torch.utils.data.dataloader.default_collate`函数，将batch中的数据叠起来。见Jay E的CSDN博客。</li>
+    <li>`device.py`中根据cuda中的空间大小确定了batch size的大小，他这里的batch size设成GB单位的显存数量的0.3倍我有点不理解。还有一个函数用来将模型量化成bf16，以及搬到特定的device上去，值的学习。</li>
+    <li>`checkpoint.py`用来下载模型，其中的一个下载函数非常值的学习，通过request请求，使用流的方式，并且带进度条，bravo。具体做法是，先得到一个请求结果resp，从其中的header中得到总长度，resp参数中的streamm=True表示使用流的方式，即不是一下子把所用内容都取出来，而是一步一步的，先提取header，再在需要的时候取数据。这个函数要背下来，明天写到自己的utils里面。其他的就是一些辅助的函数了，获取路径啦，执行具体文件的下载啦等等。</li>
 </ul>
 </font>
