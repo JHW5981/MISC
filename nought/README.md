@@ -114,3 +114,18 @@
     <li>`checkpoint.py`用来下载模型，其中的一个下载函数非常值的学习，通过request请求，使用流的方式，并且带进度条，bravo。具体做法是，先得到一个请求结果resp，从其中的header中得到总长度，resp参数中的streamm=True表示使用流的方式，即不是一下子把所用内容都取出来，而是一步一步的，先提取header，再在需要的时候取数据。这个函数要背下来，明天写到自己的utils里面。其他的就是一些辅助的函数了，获取路径啦，执行具体文件的下载啦等等。</li>
 </ul>
 </font>
+
+<h1><font face="黑体" size=10 color=white>2024.3.8 总结之夜😈</font></h1>
+<font face="宋体" size=5 color=white>
+总结一下之前些的所有内容吧🔱🔱🔱。
+<ul>
+    <li>首先最开始的`lightning_module.py`，最主要的就是两个，一个是Model部分，另一个是Data部分。Model部分一个是定义模型是啥，一个是重写`training_step()`和`validation_step()`还有一些钩子函数啥的，然后就是重写`configure_optimizers()`定义训练的优化器，其他细节就是实现上代码了，要熟悉多看多练，菜就多练🤡🤡🤡，注意这个Model Module部分继承的是pl.LightningModule。Data那边就是重写了`trainer_loader()`和`val_loader()`，还有一些helper function，其他细节就是实现上代码了，要熟悉多看多练，菜就多练🤡🤡🤡，注意这个Data Module部分继承的是pl.LightningDataModule。</li>
+    <li>接着是训练代码`train.py`，这里面就是用到了上面定义的Model Module和Data Module，然后定义各种需要的回调函数，用在训练过程中监视和执行，重点是搞清楚`pl.Trainer`它的各个参数的用法。</li>
+    <li>`test.py`就是导入数据，导入模型，然后跑出来结果，计算各种指标，完事。`predict.py`差不多，但是不是计算指标了，而是将模型真正用到实处，产生我们的实际结果了。</li>
+    <li>`model.py`定义了我们需要的各种模型，以及模型的config类。模型的话可以直接用别人写好的，然后config一下完事。难点在于怎么把那些模型的api玩转，，，菜就多练🤡🤡🤡，need time。。。</li>
+    <li>`transofms.py`定义了对输入进行怎样的transform，用到了先进nb的库`albumentations`，难点也在学这个库上，哭死😭，菜就多练🤡🤡🤡。</li>
+    <li>`metrics.py`计算我们需要计算的各种指标，`compute_metrics`完成所有指标的计算。</li>
+    <li>`dataset.py`定义了各种的Dataset类，雨来管理数据集中的数据，可以用到Data Module里面。</li>
+    <li>`checkpoint.py`用来下载预训练好的模型，下到本地之后返回本地的路径。里面的那个下载的函数值的学习。</li>
+</ul>
+</font>
