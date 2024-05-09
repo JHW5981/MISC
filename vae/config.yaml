@@ -1,0 +1,30 @@
+
+name: 'VanillaVAE'
+in_channels: 1
+latent_dim: 128
+hidden_dim: [32, 64, 128, 256]
+
+
+data_path: "/home/jihuawei/jhw2024spring/MISC/vae/data"
+batch_size: 1024
+num_workers: 4
+
+
+LR: 0.005
+weight_decay: 0.0
+scheduler_gamma: 0.95
+seed: 42
+
+epochs: 30
+
+clip_max_norm: 0.1
+output_dir: "outputs/"
+
+world_size: 1
+dist_url: "env://"
+
+device: 'cuda'
+
+kld_weight: 0.0001
+
+resume: "/home/jihuawei/jhw2024spring/MISC/vae/outputs/checkpoint.pth"
